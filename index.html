@@ -17,10 +17,9 @@
 <body>
     <form>
         Enter Player Name: <br>
-        <input id="add-player" type="text" name="user">
-        <script src="assets/js/app.js"></script>
+        <input id="player-in" type="text" name="user">
         <br><br>
-        <input type="submit" value="Submit">
+        <input id="add-player" type="submit" value="Join">
     </form>
     <div id="p1-choice">
         <button id="p1-r">Rock</button>
@@ -35,7 +34,13 @@
     </div>
     <div id="chat">
         <textarea id="text-box"></textarea>
+        <form>
+            <input id="player-chat" type="text" name="chat">
+            <input id="add-chat" type="submit" value="Send">
+        </form>
     </div>
+
+    <script src="assets/js/app.js"></script>
 </body>
 
 </html>
