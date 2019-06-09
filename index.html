@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,29 @@
     <title>Rock, Paper, Scissors</title>
     <link rel="stylesheet" href="assets/css/style.html">
 </head>
+
 <body>
-    <script src="assets/js/app.js"></script>
+    <form>
+        Enter Player Name: <br>
+        <input id="add-player" type="text" name="user">
+        <script src="assets/js/app.js"></script>
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="p1-choice">
+        <button id="p1-r">Rock</button>
+        <button id="p1-p">Paper</button>
+        <button id="p1-s">Scissors</button>
+    </div>
+    <div id="game"></div>
+    <div id="p2-choice">
+        <button id="p2-r">Rock</button>
+        <button id="p2-p">Paper</button>
+        <button id="p2-s">Scissors</button>
+    </div>
+    <div id="chat">
+        <textarea id="text-box"></textarea>
+    </div>
 </body>
+
 </html>
