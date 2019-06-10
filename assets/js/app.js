@@ -1,19 +1,5 @@
 var players = [];
 
-var p1 = {
-    name: "",
-    choice: "",
-    chat: [],
-    exists: false
-};
-
-var p2 = {
-    name: "",
-    choice: "",
-    chat: [],
-    exists: false,
-};
-
 var config = {
     apiKey: "AIzaSyDNG5Ze8prVwVwa7GKyX_t_7Vc6H743xy8",
     authDomain: "rps-multi-12251.firebaseapp.com",
@@ -28,23 +14,30 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
+var connectionsRef = database.ref("/connections");
+var connectedRef = database.ref(".info/connected");
+
+
 $("#add-player").on("click", (e) => {
     e.preventDefault();
+    var player = {
+        name: "",
+        choice: "",
+        chat: [],
+    };
+    
 
-    if (!p1.exists) {
-        p1.name = $("#player-in").val();
+    if (players.length < 2) {
+        console.log("eyyy");
+        
+        
+        player.name = $("#player-in").val();
         $("#player-in").val("");
-        p1.exists = true;
-        database.ref().set({
-            player1: p1
-        });
-    }
-    if (!p2.exists) {
-        p2.name = $("#player-in").val();
-        $("#player-in").val("");
-        p2.exists = true;
-        database.ref().set({
-            player2: p2
-        });
+
+        var con = connectionsRef.push(player);
+        players.push(player)
+
+
+        con.onDisconnect().remove();
     }
 });
