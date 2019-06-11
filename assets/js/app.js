@@ -29,8 +29,8 @@ $("#add-player").on("click", (e) => {
         console.log(numPlayer);
         console.log("eyyy");
         numPlayer++;
-        
-        
+
+
         player.name = $("#player-in").val();
         $("#player-in").val("");
 
@@ -43,8 +43,8 @@ $("#add-player").on("click", (e) => {
     else if (numPlayer == 1) {
         console.log("eyyy2");
         numPlayer++;
-        
-        
+
+
         player.name = $("#player-in").val();
         $("#player-in").val("");
 
@@ -56,32 +56,58 @@ $("#add-player").on("click", (e) => {
     }
     else {
         console.log(numPlayer);
-        
+
         $("#player-in").val("PLAYERS FULL");
-    }    
+    }
 });
 
-    $(".p1-choice").on("click", function() {
-        console.log(players);
-        
-        players[0].choice = $(this).attr("data-name");
+$(".p1-choice").on("click", function () {
+
+    players[0].choice = $(this).attr("data-name");
+    database.ref("/player").update({
+        p1: players[0],
+    });
+});
+
+$(".p2-choice").on("click", function () {
+
+    players[1].choice = $(this).attr("data-name");
+    database.ref("/player").update({
+        p2: players[1],
+    });
+
+    runGame();
+});
+
+database.ref().on("value", function (snapshot) {
+
+    numPlayer = snapshot.val().player.count;
+    players[0] = snapshot.val().player.p1;
+    players[1] = snapshot.val().player.p2;
+
+    runGame();
+});
+
+var runGame = function () {
+    if (players[0].choice !== "" && players[1].choice !== "") {
+        if ((players[0].choice === "r" && players[1].choice === "s") ||
+            (players[0].choice === "s" && players[1].choice === "p") ||
+            (players[0].choice === "p" && players[1].choice === "r")) {
+
+            $("#game").html("<h2>" + players[0].name + " wins!</h2>");
+        } else if (players[0].choice === players[1].choice) {
+            //ties++;
+            $("#game").html("<h2>WOW ITS A TIE</h2>")
+
+        } else {
+            $("#game").html("<h2>" + players[1].name + " wins!</h2>");
+        }
+        players[0].choice = "";
+        players[1].choice = "";
+
         database.ref("/player").update({
             p1: players[0],
-        });
-    });
-
-    $(".p2-choice").on("click", function() {
-        console.log(players);
-        
-        players[1].choice = $(this).attr("data-name");
-        database.ref("/player").update({
             p2: players[1],
         });
-    });
-
-database.ref().on("value", function(snapshot) {
-         
-        numPlayer = snapshot.val().player.count;
-        players[0] = snapshot.val().player.p1;
-        players[1] = snapshot.val().player.p2;
-});
+    }
+};
