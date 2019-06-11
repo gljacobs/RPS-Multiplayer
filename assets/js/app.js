@@ -17,6 +17,21 @@ var database = firebase.database();
 
 var playerRef = database.ref("/player");
 
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === " ") c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) {
+            return c.substring(nameEQ.length, c.length);
+        }
+    }
+    return null;
+}
+
+
+
 $("#add-player").on("click", (e) => {
     e.preventDefault();
     var player = {
@@ -39,6 +54,8 @@ $("#add-player").on("click", (e) => {
             count: numPlayer
         });
         players.push(player);
+        document.cookie = "content=<p>" + player.name + "</p><button class='p1-choice' id='p1-r' data-name='r'>Rock</button><button class='p1-choice' id='p1-p' data-name='p'>Paper</button><button class='p1-choice' id='p1-s' data-name='s'>Scissors</button>";
+        $("#options").html(readCookie("content"));
     }
     else if (numPlayer == 1) {
         console.log("eyyy2");
@@ -53,6 +70,8 @@ $("#add-player").on("click", (e) => {
             count: numPlayer
         });
         players.push(player);
+        document.cookie = "content=<p>" + player.name + "</p><button class='p2-choice' id='p2-r' data-name='r'>Rock</button><button class='p2-choice' id='p2-p' data-name='p'>Paper</button><button class='p2-choice' id='p2-s' data-name='s'>Scissors</button>";
+        $("#options").html(readCookie("content"));
     }
     else {
         console.log(numPlayer);
@@ -61,7 +80,7 @@ $("#add-player").on("click", (e) => {
     }
 });
 
-$(".p1-choice").on("click", function () {
+$(document).on("click", ".p1-choice", function () {
 
     players[0].choice = $(this).attr("data-name");
     database.ref("/player").update({
@@ -69,7 +88,7 @@ $(".p1-choice").on("click", function () {
     });
 });
 
-$(".p2-choice").on("click", function () {
+$(document).on("click", ".p2-choice", function () {
 
     players[1].choice = $(this).attr("data-name");
     database.ref("/player").update({
