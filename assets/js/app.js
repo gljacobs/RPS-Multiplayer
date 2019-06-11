@@ -1,4 +1,5 @@
 var players = [];
+var numPlayer = 0;
 
 var config = {
     apiKey: "AIzaSyDNG5Ze8prVwVwa7GKyX_t_7Vc6H743xy8",
@@ -14,9 +15,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var connectionsRef = database.ref("/connections");
-var connectedRef = database.ref(".info/connected");
-
+var playerRef = database.ref("/player");
 
 $("#add-player").on("click", (e) => {
     e.preventDefault();
@@ -25,19 +24,45 @@ $("#add-player").on("click", (e) => {
         choice: "",
         chat: [],
     };
-    
 
-    if (players.length < 2) {
+    if (numPlayer === 0) {
         console.log("eyyy");
+        numPlayer++;
         
         
         player.name = $("#player-in").val();
         $("#player-in").val("");
 
-        var con = connectionsRef.push(player);
-        players.push(player)
-
-
-        con.onDisconnect().remove();
+        database.ref("/player").set({
+            p1: player,
+            count: numPlayer
+        });
+        players.push(player);
     }
+    else if(numPlayer === 1) {
+        console.log("eyyy2");
+        numPlayer++;
+        
+        
+        player.name = $("#player-in").val();
+        $("#player-in").val("");
+
+        database.ref("/player").update({
+            p2: player,
+            count: numPlayer
+        });
+        players.push(player);
+    }
+    else {
+        $("#player-in").val("PLAYERS FULL");
+    }
+
+    console.log(database.ref().once('value'));
+    
+});
+
+database.ref().on("value", function(snapshot) { 
+        numPlayer = snapshot.val().count;
+        players[0] = snapshot.val().p1;
+        players[0] = snapshot.val().p2;
 });
