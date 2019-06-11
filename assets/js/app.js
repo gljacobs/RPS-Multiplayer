@@ -86,6 +86,8 @@ $(document).on("click", ".p1-choice", function () {
     database.ref("/player").update({
         p1: players[0],
     });
+
+    runGame();
 });
 
 $(document).on("click", ".p2-choice", function () {
@@ -94,7 +96,7 @@ $(document).on("click", ".p2-choice", function () {
     database.ref("/player").update({
         p2: players[1],
     });
-
+    
     runGame();
 });
 
@@ -104,8 +106,22 @@ database.ref().on("value", function (snapshot) {
     players[0] = snapshot.val().player.p1;
     players[1] = snapshot.val().player.p2;
 
+    if(players[0].choice === ""){
+         renderHtml("#actions1", "<p id='action-1'>" + players[0].name + " is thinking...</p>");
+    } else {
+        renderHtml("#actions1", "<p id='action-2'>" + players[0].name + " is ready!</p>");
+    }
+    if(players[1].choice === ""){ 
+        renderHtml("#actions2", "<p id='action-2'>" + players[1].name + " is thinking...</p>");
+    } else {
+        renderHtml("#actions2", "<p id='action-2'>" + players[1].name + " is ready!</p>");
+    }
     runGame();
 });
+
+var renderHtml = function(where, what) {
+    $(where).html(what);
+}
 
 var runGame = function () {
     if (players[0].choice !== "" && players[1].choice !== "") {
