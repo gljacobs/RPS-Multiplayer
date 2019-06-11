@@ -25,7 +25,8 @@ $("#add-player").on("click", (e) => {
         chat: [],
     };
 
-    if (numPlayer === 0) {
+    if (numPlayer == 0) {
+        console.log(numPlayer);
         console.log("eyyy");
         numPlayer++;
         
@@ -39,7 +40,7 @@ $("#add-player").on("click", (e) => {
         });
         players.push(player);
     }
-    else if(numPlayer === 1) {
+    else if (numPlayer == 1) {
         console.log("eyyy2");
         numPlayer++;
         
@@ -54,15 +55,33 @@ $("#add-player").on("click", (e) => {
         players.push(player);
     }
     else {
+        console.log(numPlayer);
+        
         $("#player-in").val("PLAYERS FULL");
-    }
-
-    console.log(database.ref().once('value'));
-    
+    }    
 });
 
-database.ref().on("value", function(snapshot) { 
-        numPlayer = snapshot.val().count;
-        players[0] = snapshot.val().p1;
-        players[0] = snapshot.val().p2;
+    $(".p1-choice").on("click", function() {
+        console.log(players);
+        
+        players[0].choice = $(this).attr("data-name");
+        database.ref("/player").update({
+            p1: players[0],
+        });
+    });
+
+    $(".p2-choice").on("click", function() {
+        console.log(players);
+        
+        players[1].choice = $(this).attr("data-name");
+        database.ref("/player").update({
+            p2: players[1],
+        });
+    });
+
+database.ref().on("value", function(snapshot) {
+         
+        numPlayer = snapshot.val().player.count;
+        players[0] = snapshot.val().player.p1;
+        players[1] = snapshot.val().player.p2;
 });
